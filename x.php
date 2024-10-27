@@ -2,19 +2,25 @@ function transformDateFormat(array $dates): array {
     $result = [];
     
     foreach ($dates as $date) {
-        // Check format YYYY/MM/DD
+        // Check for format YYYY/MM/DD
         if (preg_match('/^(\d{4})\/(\d{2})\/(\d{2})$/', $date, $matches)) {
-            $formattedDate = $matches[1] . $matches[2] . $matches[3];
-            $result[] = $formattedDate;
+            if (checkdate((int)$matches[2], (int)$matches[3], (int)$matches[1])) {
+                $formattedDate = $matches[1] . $matches[2] . $matches[3];
+                $result[] = $formattedDate;
+            }
         }
-        // Check format MM-DD-YYYY
+        // Check for format MM-DD-YYYY
         elseif (preg_match('/^(\d{2})-(\d{2})-(\d{4})$/', $date, $matches)) {
-            $formattedDate = $matches[3] . $matches[1] . $matches[2];
-            $result[] = $formattedDate;
+            if (checkdate((int)$matches[1], (int)$matches[2], (int)$matches[3])) {
+                $formattedDate = $matches[3] . $matches[1] . $matches[2];
+                $result[] = $formattedDate;
+            }
         }
-        // Check format YYYYMMDD without delimiters
+        // Check for format YYYYMMDD without delimiters
         elseif (preg_match('/^(\d{4})(\d{2})(\d{2})$/', $date, $matches)) {
-            $result[] = $date;
+            if (checkdate((int)$matches[2], (int)$matches[3], (int)$matches[1])) {
+                $result[] = $date;
+            }
         }
     }
     
