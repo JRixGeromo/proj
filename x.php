@@ -1,26 +1,25 @@
-function transformDateFormat(array $dates): array {
-    $result = [];
-    
-    foreach ($dates as $date) {
-        // Match YYYY/MM/DD
-        if (preg_match('/^(\d{4})\/(\d{2})\/(\d{2})$/', $date, $matches)) {
-            $result[] = $matches[1] . $matches[2] . $matches[3];
-        }
-        // Match MM-DD-YYYY
-        elseif (preg_match('/^(\d{2})-(\d{2})-(\d{4})$/', $date, $matches)) {
-            $result[] = $matches[3] . $matches[1] . $matches[2];
-        }
-        // Match YYYYMMDD (already in the correct format)
-        elseif (preg_match('/^(\d{4})(\d{2})(\d{2})$/', $date)) {
-            $result[] = $date;
-        }
-    }
-    
-    return $result;
-}
+-- Suggested testing environment:
+-- https://www.db-fiddle.com/ with MySQL version set to 8
 
-// Test case
-$dates = transformDateFormat([
-    "2010/02/20", "2 016p 19p 12", "11-18-2012", "2018 12 24", "20130720"
-]);
-print_r($dates);
+-- Example case create statement:
+CREATE TABLE students (
+    id INTEGER PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    score INTEGER NOT NULL,
+    class INTEGER NOT NULL    
+);
+
+INSERT INTO students(id, name, score, class) VALUES(1, 'Mark', 894, 7);
+INSERT INTO students(id, name, score, class) VALUES(2, 'Bill', 894, 7);
+INSERT INTO students(id, name, score, class) VALUES(3, 'Maria', 678, 8);
+INSERT INTO students(id, name, score, class) VALUES(4, 'David', 733, 9);
+INSERT INTO students(id, name, score, class) VALUES(5, 'John', 899, 9);
+INSERT INTO students(id, name, score, class) VALUES(6, 'Rob', 802, 9);
+
+-- Expected output (rows in any order):
+-- name    score    class
+-- -------------------------
+-- Mark    894      7       
+-- Bill    894      7             
+-- Maria   678      8
+-- John    899      9
