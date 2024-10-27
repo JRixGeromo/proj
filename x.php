@@ -12,8 +12,8 @@ function transformDateFormat(array $dates): array {
             $formattedDate = $matches[3] . $matches[1] . $matches[2];
             $result[] = $formattedDate;
         }
-        // Check format YYYY DDD MM (assuming it's YYYYMMDD without delimiters)
-        elseif (preg_match('/^(\d{8})$/', $date)) {
+        // Check format YYYYMMDD without delimiters
+        elseif (preg_match('/^(\d{4})(\d{2})(\d{2})$/', $date, $matches)) {
             $result[] = $date;
         }
     }
