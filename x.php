@@ -45,10 +45,10 @@ $game->addCubes([
     [true, true],
     [false, true]
 ]);
-echo $game->getHeight() . "\n"; // should print 2
+echo $game->getHeight() . "\n"; // Expected output: 2
 
 $game->addCubes([
     [false, false],
     [true, true]
 ]);
-echo $game->getHeight() . "\n"; // should print 2
+echo $game->getHeight() . "\n"; // Expected output: 2
