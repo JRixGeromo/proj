@@ -13,6 +13,7 @@ class ConstructionGame
 
     public function addCubes(array $cubes) : void
     {
+        // Add cubes to the grid
         for ($i = 0; $i < $this->length; $i++) {
             for ($j = 0; $j < $this->width; $j++) {
                 if ($cubes[$i][$j] === true) {
@@ -20,27 +21,30 @@ class ConstructionGame
                 }
             }
         }
-        // Placeholder for clearing logic if a layer reset is required
-        $this->applyClearingRules();
+        
+        // Apply the clearing rule to the bottom layer
+        $this->clearFullRows();
     }
 
-    private function applyClearingRules(): void
+    private function clearFullRows(): void
     {
-        // Example clearing rule:
-        // Check if any row or column is fully filled to a certain height, then clear it.
         for ($i = 0; $i < $this->length; $i++) {
+            // Check if the entire row $i is filled
             $isFullRow = true;
             for ($j = 0; $j < $this->width; $j++) {
-                if ($this->heights[$i][$j] < 1) {
+                if ($this->heights[$i][$j] == 0) {
                     $isFullRow = false;
                     break;
                 }
             }
-            // Clear row if fully filled
+            // Clear the row and move everything above it down if it’s full
             if ($isFullRow) {
-                for ($j = 0; $j < $this->width; $j++) {
-                    $this->heights[$i][$j] = 0;
+                // Shift rows above down by one
+                for ($k = $i; $k > 0; $k--) {
+                    $this->heights[$k] = $this->heights[$k - 1];
                 }
+                // Clear the top row
+                $this->heights[0] = array_fill(0, $this->width, 0);
             }
         }
     }
@@ -57,7 +61,7 @@ class ConstructionGame
     }
 }
 
-// Test the implementation
+// Test the implementation with the provided example
 $game = new ConstructionGame(2, 2);
 
 $game->addCubes([
@@ -68,10 +72,10 @@ $game->addCubes([
     [true, true],
     [false, true]
 ]);
-echo $game->getHeight() . "\n"; // Expected output: 2 (depends on clearing logic)
+echo $game->getHeight() . "\n"; // Expected output might vary based on the clearing rule
 
 $game->addCubes([
     [false, false],
     [true, true]
 ]);
-echo $game->getHeight() . "\n"; // Expected output: might vary based on clearing rules
+echo $game->getHeight() . "\n"; // Expected output might vary based on the clearing rule
