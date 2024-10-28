@@ -22,29 +22,32 @@ class ConstructionGame
             }
         }
         
-        // Apply the clearing rule to the bottom layer
-        $this->clearFullRows();
+        // Immediately clear the bottom layer if fully filled
+        $this->clearBottomLayer();
     }
 
-    private function clearFullRows(): void
+    private function clearBottomLayer(): void
     {
-        for ($i = 0; $i < $this->length; $i++) {
-            // Check if the entire row $i is filled
+        while (true) {
             $isFullRow = true;
+            // Check the bottom row
             for ($j = 0; $j < $this->width; $j++) {
-                if ($this->heights[$i][$j] == 0) {
+                if ($this->heights[0][$j] == 0) {
                     $isFullRow = false;
                     break;
                 }
             }
-            // Clear the row and move everything above it down if it’s full
+            // Clear if the bottom row is full, and move everything above down
             if ($isFullRow) {
-                // Shift rows above down by one
-                for ($k = $i; $k > 0; $k--) {
-                    $this->heights[$k] = $this->heights[$k - 1];
+                // Shift all rows above the bottom down by one
+                for ($i = 0; $i < $this->length - 1; $i++) {
+                    $this->heights[$i] = $this->heights[$i + 1];
                 }
-                // Clear the top row
-                $this->heights[0] = array_fill(0, $this->width, 0);
+                // Reset the top row
+                $this->heights[$this->length - 1] = array_fill(0, $this->width, 0);
+            } else {
+                // Exit if the bottom row is not full
+                break;
             }
         }
     }
@@ -72,10 +75,10 @@ $game->addCubes([
     [true, true],
     [false, true]
 ]);
-echo $game->getHeight() . "\n"; // Expected output might vary based on the clearing rule
+echo $game->getHeight() . "\n"; // Expected output should reflect immediate clearing of the bottom row if full
 
 $game->addCubes([
     [false, false],
     [true, true]
 ]);
-echo $game->getHeight() . "\n"; // Expected output might vary based on the clearing rule
+echo $game->getHeight() . "\n"; // Expected output should reflect consecutive clearing behavior
