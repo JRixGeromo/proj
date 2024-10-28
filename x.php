@@ -20,6 +20,29 @@ class ConstructionGame
                 }
             }
         }
+        // Placeholder for clearing logic if a layer reset is required
+        $this->applyClearingRules();
+    }
+
+    private function applyClearingRules(): void
+    {
+        // Example clearing rule:
+        // Check if any row or column is fully filled to a certain height, then clear it.
+        for ($i = 0; $i < $this->length; $i++) {
+            $isFullRow = true;
+            for ($j = 0; $j < $this->width; $j++) {
+                if ($this->heights[$i][$j] < 1) {
+                    $isFullRow = false;
+                    break;
+                }
+            }
+            // Clear row if fully filled
+            if ($isFullRow) {
+                for ($j = 0; $j < $this->width; $j++) {
+                    $this->heights[$i][$j] = 0;
+                }
+            }
+        }
     }
 
     public function getHeight() : int  
@@ -45,10 +68,10 @@ $game->addCubes([
     [true, true],
     [false, true]
 ]);
-echo $game->getHeight() . "\n"; // Expected output: 2
+echo $game->getHeight() . "\n"; // Expected output: 2 (depends on clearing logic)
 
 $game->addCubes([
     [false, false],
     [true, true]
 ]);
-echo $game->getHeight() . "\n"; // Expected output: 2
+echo $game->getHeight() . "\n"; // Expected output: might vary based on clearing rules
